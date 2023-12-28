@@ -1,6 +1,3 @@
-#get แสดงข้อมูล post สร้างข้อมูลใหม่ delete ลบ put อัพเดตข้อมูล
-# model form api url
-
 from django.http import JsonResponse
 from rest_framework.decorators import (
     api_view,
@@ -8,6 +5,9 @@ from rest_framework.decorators import (
     permission_classes,
 )
 from .forms import SignupForm
+
+# get แสดงข้อมูล post สร้างข้อมูลใหม่ delete ลบ put อัพเดตข้อมูล
+# model form api url
 
 
 @api_view(["POST"])
@@ -26,7 +26,7 @@ def signup(request):
             "role": data.get("role"),
             "password1": data.get("password1"),
             "password2": data.get("password2"),
-            "prefix" : data.get("prefix")
+            "prefix": data.get("prefix"),
         }
     )
 
