@@ -37,3 +37,16 @@ def signup(request):
         print(form.errors)
         message = "error"
     return JsonResponse({"message": message})
+
+@api_view(["GET"])
+def userInfo(request):
+    return JsonResponse({
+        "id": request.user.id,
+        "username": request.user.username,
+        "firstname": request.user.firstname,
+        "lastname": request.user.lastname,
+        "email": request.user.email,
+        "role": request.user.role,
+        "prefix": request.user.prefix,
+    })
+    
