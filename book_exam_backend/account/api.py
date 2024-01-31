@@ -5,6 +5,7 @@ from rest_framework.decorators import (
     permission_classes,
 )
 from .forms import SignupForm
+from django.contrib.auth.forms import PasswordChangeForm
 
 # get แสดงข้อมูล post สร้างข้อมูลใหม่ delete ลบ put อัพเดตข้อมูล
 # model form api url
@@ -50,3 +51,16 @@ def userInfo(request):
         "prefix": request.user.prefix,
     })
     
+# change Password
+@api_view(["POST"])
+def changePassword(request):
+    user = request.user
+
+    form = PasswordChangeForm(data=request.POST, user=user)
+
+    if form.is_valid():
+        form.save()
+
+        return JsonResponse({"message": "success"})
+    else:
+        return JsonResponse({"message": form.errors.as_json()}, safe=False)

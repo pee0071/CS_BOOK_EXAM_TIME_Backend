@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "corsheaders",
     "account",
+    "subject",
+    "book_exam",
 ]
 
 MIDDLEWARE = [
