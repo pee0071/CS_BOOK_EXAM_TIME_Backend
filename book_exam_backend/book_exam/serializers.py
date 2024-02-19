@@ -1,27 +1,24 @@
 from rest_framework import serializers
-from .models import Subject , StudentEnrolled
+from .models import Notepad
 from account.models import User
+from subject.models import Subject
 
-class SubjectSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Subject
-        fields = ['subjectCode', 'subjectName', 'teacher']
-        
-class StudentEnrolledSerializer(serializers.ModelSerializer):
+class NotepadSerializers(serializers.ModelSerializer):
     student = serializers.PrimaryKeyRelatedField(
         queryset= User.objects.all(),
         required=True
     )
-    
+     
     subject = serializers.PrimaryKeyRelatedField(
         queryset= Subject.objects.all(),
         required=True
     )
+    
     class Meta:
-        model = StudentEnrolled
+        model = Notepad
         fields = [
             "id",
-            "student",
+            "description",
             "subject",
-        ]       
-        depth = 2
+            "student"
+        ]

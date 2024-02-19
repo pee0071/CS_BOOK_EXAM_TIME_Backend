@@ -1,3 +1,9 @@
 from django.shortcuts import render
+from .models import Notepad
+from .serializers import NotepadSerializers
+from rest_framework import viewsets
 
-# Create your views here.
+class NotepadViewSet(viewsets.ModelViewSet):
+    queryset = Notepad.objects.all()
+    serializer_class = NotepadSerializers
+    

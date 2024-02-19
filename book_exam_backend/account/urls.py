@@ -2,10 +2,11 @@ from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import api
 from rest_framework.routers import DefaultRouter
-from .views import UserViewSet
+from .views import UserViewSet 
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
+
 
 urlpatterns = [
     path("signup/", api.signup, name="signup"),
@@ -15,5 +16,6 @@ urlpatterns = [
     path("userInfo/", api.userInfo, name='userInfo'),
     path("changePassword/", api.changePassword, name='changePassword'),
     path('', include(router.urls)),
+    
     
 ]
