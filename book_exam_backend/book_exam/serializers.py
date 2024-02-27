@@ -3,6 +3,8 @@ from .models import Notepad
 from account.models import User
 from subject.models import Subject
 from django.utils.translation import gettext_lazy as _
+from account.serializers import UserSerializer
+from subject.serializaers import SubjectSerializer
 
 class NotepadSerializers(serializers.ModelSerializer):
     default_error_messages = {
@@ -19,14 +21,23 @@ class NotepadSerializers(serializers.ModelSerializer):
         queryset= Subject.objects.all(),
         required=True
     )
-
+    
+    studentNotepad = UserSerializer(
+        source = 'student', read_only = True
+    )
+    
+    subjectNotepad = SubjectSerializer(
+        source = 'subject', read_only = True
+    )
     class Meta:
         model = Notepad
         fields = [
             "id",
             "description",
             "subject",
-            "student"
+            "student",
+            "studentNotepad",
+            "subjectNotepad"
         ]
     def validate(self, attrs):
         if Notepad.objects.filter(
