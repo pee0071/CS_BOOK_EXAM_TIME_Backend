@@ -8,27 +8,14 @@ from subject.serializaers import SubjectSerializer
 
 class NotepadSerializers(serializers.ModelSerializer):
     default_error_messages = {
-        'Subject_already_exists': _(
-            'This Subject already exists.'
-        )
+        'Subject_already_exists': _('This Subject already exists.')
     }
-    student = serializers.PrimaryKeyRelatedField(
-        queryset= User.objects.all(),
-        required=True
-    )
+    student = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=True)
+    subject = serializers.PrimaryKeyRelatedField(queryset=Subject.objects.all(), required=True)
+    
+    studentNotepad = UserSerializer(source='student', read_only=True)
+    subjectNotepad = SubjectSerializer(source='subject', read_only=True)
 
-    subject = serializers.PrimaryKeyRelatedField(
-        queryset= Subject.objects.all(),
-        required=True
-    )
-    
-    studentNotepad = UserSerializer(
-        source = 'student', read_only = True
-    )
-    
-    subjectNotepad = SubjectSerializer(
-        source = 'subject', read_only = True
-    )
     class Meta:
         model = Notepad
         fields = [
@@ -39,20 +26,18 @@ class NotepadSerializers(serializers.ModelSerializer):
             "studentNotepad",
             "subjectNotepad"
         ]
+
     def validate(self, attrs):
-        if Notepad.objects.filter(
-                student=attrs.get('student')).filter(
-                subject=attrs.get(
-                    'subject')).exists():
-            raise serializers.ValidationError({
-                'student': self.error_messages['Subject_already_exists']
-            })
+        student = attrs.get('student')
+        subject = attrs.get('subject')
+        # Check if the instance is being updated (self.instance is not None) or created (self.instance is None)
+        if self.instance:
+            # For updates, check if the updated attributes match another object that is not the instance being updated
+            if Notepad.objects.exclude(pk=self.instance.pk).filter(student=student, subject=subject).exists():
+                raise serializers.ValidationError({'student': self.error_messages['Subject_already_exists']})
+        else:
+            # For creations, check if any object matches the attributes
+            if Notepad.objects.filter(student=student, subject=subject).exists():
+                raise serializers.ValidationError({'student': self.error_messages['Subject_already_exists']})
 
         return attrs
-
-    def save(self):
-        data = self._validated_data
-        notepad = self.Meta.model(**data)
-        notepad.save()
-
-        return NotepadSerializers(notepad).data
