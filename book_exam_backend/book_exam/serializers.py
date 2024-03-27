@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Notepad
+from .models import Notepad , ExamDetail
 from account.models import User
 from subject.models import Subject
 from django.utils.translation import gettext_lazy as _
@@ -41,3 +41,35 @@ class NotepadSerializers(serializers.ModelSerializer):
                 raise serializers.ValidationError({'student': self.error_messages['Subject_already_exists']})
 
         return attrs
+    
+class ExamDetailSerializers(serializers.ModelSerializer):
+    subject = serializers.PrimaryKeyRelatedField(queryset=Subject.objects.all(), required=True)
+    
+    subjectExamDetail = SubjectSerializer(source='subject', read_only=True)
+    
+    class Meta: 
+        model = ExamDetail
+        fields = [
+            "id",
+            "subject",
+            "description",
+            "startTime",
+            "endTime",
+            "subjectExamDetail",
+            "date"
+        ]
+        
+    def validate(self, attrs):
+        subject = attrs.get('subject')
+        if self.instance:
+            if ExamDetail.objects.exclude(pk=self.instance.pk).filter(subject=subject).exists():
+                raise serializers.ValidationError({'subject': self.error_messages['Subject_already_exists']})
+        else:
+            if ExamDetail.objects.filter(subject=subject).exists():
+                raise serializers.ValidationError({'subject': self.error_messages['Subject_already_exists']})
+            
+        return attrs
+        
+        
+        
+    

@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .models import Notepad
-from .serializers import NotepadSerializers
+from .models import Notepad , ExamDetail
+from .serializers import NotepadSerializers ,ExamDetailSerializers
 from rest_framework import viewsets
 
 class NotepadViewSet(viewsets.ModelViewSet):
@@ -15,4 +15,22 @@ class NotepadViewSet(viewsets.ModelViewSet):
         if subject is not None:
             queryset = queryset.filter(subject__id=subject)
         return queryset
+    
+class ExamDetailViewSet(viewsets.ModelViewSet):
+    queryset = ExamDetail.objects.all()
+    serializer_class = ExamDetailSerializers
+    def get_queryset(self):
+        subject = self.request.query_params.get("subject")
+        if subject is not None:
+            queryset = queryset.filter(subject__id=subject)
+        return queryset
+    
+            
+        
+    
+    
+        
+        
+    
+
     
