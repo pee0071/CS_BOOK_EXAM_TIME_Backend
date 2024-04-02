@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from .models import Notepad , ExamDetail
 from account.models import User
-from subject.models import Subject
+from subject.models import Subject, StudentEnrolled
 from django.utils.translation import gettext_lazy as _
 from account.serializers import UserSerializer
-from subject.serializaers import SubjectSerializer
+from subject.serializaers import SubjectSerializer, StudentEnrolledSerializer
 
 class NotepadSerializers(serializers.ModelSerializer):
     default_error_messages = {
@@ -56,8 +56,15 @@ class ExamDetailSerializers(serializers.ModelSerializer):
             "startTime",
             "endTime",
             "subjectExamDetail",
-            "date"
+            "date",
+            # "studentEnroll"
         ]
+    # def get_studentEnroll(self, obj):
+    #     # ดึงข้อมูลนักเรียนที่ลงทะเบียนในวิชานี้
+    #     student_enrollments = StudentEnrolled.objects.filter(subject=obj.subject)
+    #     # สร้าง Serializer สำหรับข้อมูลนักเรียนที่ลงทะเบียน
+    #     serializer = StudentEnrolledSerializer(student_enrollments, many=True)
+    #     return serializer.data
         
     def validate(self, attrs):
         subject = attrs.get('subject')
@@ -69,6 +76,7 @@ class ExamDetailSerializers(serializers.ModelSerializer):
                 raise serializers.ValidationError({'subject': self.error_messages['Subject_already_exists']})
             
         return attrs
+    
         
         
         
