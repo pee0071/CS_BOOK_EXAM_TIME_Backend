@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Notepad , ExamDetail
 from .serializers import NotepadSerializers ,ExamDetailSerializers
+from subject.models import StudentEnrolled
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
@@ -25,27 +26,24 @@ class ExamDetailViewSet(viewsets.ModelViewSet):
     # http://localhost:8000/api/examdetail/
     # GET /education/department/?date=2024-03-29
     def get_queryset(self):
-        queryset = ExamDetail.objects.all() #ให้ get ใหม่ครั้งนึง
-        # queryset = self.queryset  # Start with the default queryset
+        queryset = ExamDetail.objects.all() 
         subject = self.request.query_params.get('subject')
         date = self.request.query_params.get('date')
 
-        if subject:
-            queryset = queryset.filter(subject__id=subject)
 
-        # if date:
-        #     queryset = queryset.filter(date=date)
+        if subject:
+            student_enrolled_queryset = StudentEnrolled.objects.filter(id=subject)
+            if student_enrolled_queryset.exists():
+                student_enrolled_instance = student_enrolled_queryset.first()
+                subjectid = student_enrolled_instance.subject_id
+                print('id =', subjectid)
+                Examdetail = ExamDetail.objects.filter(subject = subjectid)
+                print('exam =',Examdetail)
+                return Examdetail
         
         if date:
             queryset = queryset.filter(date__icontains=date)
-        print(queryset)
         return queryset
-    
-    # http://localhost:8000/examdetail/ id
-    # def destroy(self, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #     self.perform_destroy(instance)
-    #     return Response(status=status.HTTP_204_NO_CONTENT)
     
     def destroy(self, request, *args, **kwargs):
         try:

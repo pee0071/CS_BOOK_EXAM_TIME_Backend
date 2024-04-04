@@ -32,16 +32,5 @@ class StudentEnrolledViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(subject__id=subject)
         return queryset
     
-# class TeacherEnrolledViewSet(viewsets.ModelViewSet):
-#     queryset = TeacherEnrolled.objects.all()
-#     serializer_class = TeacherEnrolledSerializer
-#     def get_queryset(self):
-#         queryset = super().get_queryset()
-#         teacher = self.request.query_params.get("teacher")
-#         subject = self.request.query_params.get("subject")
-#         if teacher is not None:
-#             queryset = queryset.filter(teacher__id=teacher)
-#         if teacher is not None:
-#             queryset = queryset.filter(teacher__id=teacher)
-#         return queryset
+
     

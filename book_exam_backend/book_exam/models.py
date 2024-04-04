@@ -21,4 +21,5 @@ class ExamDetail(models.Model):
     startTime = models.TimeField()
     endTime = models.TimeField()
     date = models.DateField(blank=True, null=True)
+   
     

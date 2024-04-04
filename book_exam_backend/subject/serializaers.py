@@ -44,33 +44,3 @@ class StudentEnrolledSerializer(serializers.ModelSerializer):
         ]       
         depth = 2
         
-# class TeacherEnrolledSerializer(serializers.ModelSerializer):
-#     teacher = serializers.PrimaryKeyRelatedField(
-#         queryset= User.objects.all(),
-#         required=True
-#     )
-    
-#     subject = serializers.PrimaryKeyRelatedField(
-#         queryset= Subject.objects.all(),
-#         required=True
-#     )
-#     teacherEnrolled = UserSerializer(
-#         source = 'student', read_only = True
-#     )
-#     subjectEnrolled = SubjectSerializer(
-#         source = 'subject', read_only = True
-#     )
-        
-#     class Meta:
-#         model = TeacherEnrolled
-#         fields = [
-#             "id",
-#             "teacher",
-#             "subject",
-#             "teacherEnrolled",
-#             "subjectEnrolled"
-#         ]       
-#         depth = 2
-    
-        
-        

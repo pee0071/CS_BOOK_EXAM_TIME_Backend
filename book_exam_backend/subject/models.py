@@ -9,7 +9,5 @@ class Subject(models.Model):
 class StudentEnrolled(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-
-# class TeacherEnrolled(models.Model):
-#     teacher = models.ForeignKey(User, on_delete=models.CASCADE)
-#     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    id = models.BigAutoField(primary_key=True)
+    
